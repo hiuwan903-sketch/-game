@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>陪伴的藝術 - 社工生死教育實踐（完整版）</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        
+        .title {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .character {
+            font-size: 4em;
+            margin: 20px 0;
+        }
+        
+        .scenario {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+            border-left: 5px solid #3498db;
+        }
+        
+        .employee-scenario {
+            background: #fff3cd;
+            border-left: 5px solid #f39c12;
+        }
+        
+        .choice-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            margin: 10px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 90%;
+            transition: all 0.3s;
+        }
+        
+        .choice-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .choice-btn.correct {
+            background: #27ae60;
+        }
+        
+        .choice-btn.wrong {
+            background: #e74c3c;
+        }
+        
+        .feedback {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+            display: none;
+        }
+        
+        .employee-feedback {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .progress {
+            width: 100%;
+            height: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: #3498db;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .stage {
+            display: none;
+        }
+        
+        .stage.active {
+            display: block;
+        }
+        
+        .final-box {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .skill-badge {
+            background: #9b59b6;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 5px;
+        }
+
+        .employee-badge {
+            background: #f39c12;
+        }
+
+        .scene-counter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .phase-indicator {
+            background: #e8f4f8;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .employee-phase {
+            background: #fef9e7;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="scene-counter" id="sceneCounter">情境 1/9</div>
+    
+    <div class="container">
+        <!-- 開始頁面 -->
+        <div class="stage active" id="start">
+            <div class="character">👥</div>
+            <h1 class="title">陪伴的藝術</h1>
+            <p style="font-size: 1.2em; color: #666;">社工在安老院生死教育中的專業實踐</p>
+            
+            <div style="background: #fff3cd; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h3>🤔 完整探索：</h3>
+                <p>面對生命末期的長者，社工如何提供真正有意義的陪伴？</p>
+                <p><strong>九個完整情境：</strong></p>
+                <p>🏥 院友篇（6題）+ 👨‍💼 員工篇（3題）</p>
+            </div>
+            
+            <button class="choice-btn" onclick="startGame()">🎭 開始完整實境模擬</button>
+        </div>
+        
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <!-- 情境1-6：院友篇 -->
+        <div class="stage" id="scene1">
+            <div class="phase-indicator">🏥 院友篇</div>
+            <div class="character">👵</div>
+            <h2>情境一：初次接觸</h2>
+            
+            <div class="scenario">
+                <p>陳婆婆，85歲，剛入住安老院。她對生死教育活動很抗拒，說：「我不想談這些不吉利的事！」</p>
+            </div>
+            
+            <button class="choice-btn" data-answer="A" onclick="makeChoice(1, 'A')">直接解釋生死教育的重要性</button>
+            <button class="choice-btn" data-answer="B" onclick="makeChoice(1, 'B')">「婆婆，先聊聊您以前的工作吧」</button>
+            <button class="choice-btn" data-answer="C" onclick="makeChoice(1, 'C')">告訴她這是必修活動</button>
+            
+            <div class="feedback" id="feedback1">
+                <h3>💡 專業分析</h3>
+                <div id="result1"></div>
+                <button class="choice-btn" onclick="goToScene(2)">下一個情境 →</button>
+            </div>
+        </div>
+
+        <div class="stage" id="scene2">
+            <div class="phase-indicator">🏥 院友篇</div>
+            <div class="character">😢</div>
+            <h2>情境二：情感表達</h2>
+            
+            <div class="scenario">
+                <p>陳婆婆開始信任你，某天哭著說：「我很害怕死亡...我是不是很軟弱？」</p>
+            </div>
+            
+            <button class="choice-btn" data-answer="A" onclick="makeChoice(2, 'A')">安慰說「不要想太多，要正面」</button>
+            <button class="choice-btn" data-answer="B" onclick="makeChoice(2, 'B')">「這很正常，能說說您的擔心嗎？」</button>
+            <button class="choice-btn" data-answer="C" onclick="makeChoice(2, 'C')">提供死亡相關資訊</button>
+            
+            <div class="feedback" id="feedback2">
+                <h3>💡 專業分析</h3>
+                <div id="result2"></div>
+                <button class="choice-btn" onclick="goToScene(3)">下一個情境 →</button>
+            </div>
+        </div>
+
+        <div class="stage" id="scene3">
+            <div class="phase-indicator">🏥 院友篇</div>
+            <div class="character">😠</div>
+            <h2>情境三：家屬反對</h2>
+            
+            <div class="scenario">
+                <p>陳婆婆的兒子很生氣：「為什麼讓我媽想這些？你們是在咒她早死嗎？」</p>
+            </div>
+            
+            <button class="choice-btn" data-answer="A" onclick="makeChoice(3, 'A')">解釋生死教育理論</button>
+            <button class="choice-btn" data-answer="B" onclick="makeChoice(3, 'B')">「我理解您的擔心，您很愛媽媽」</button>
+            <button class="choice-btn" data-answer="C" onclick="makeChoice(3, 'C')">堅持專業立場</button>
+            
+            <div class="feedback" id="feedback3">
+                <h3>💡 專業分析</h3>
+                <div id="result3"></div>
+                <button class="choice-btn" onclick="goToScene(4)">下一個情境 →</button>
+            </div>
+        </div>
+
+        <div class="stage" id="scene4">
+            <div class="phase-indicator">🏥 院友篇</div>
+            <div class="character">🤔</div>
+            <h2>情境四：生命回顧</h2>
+            
+            <div class="scenario">
+                <p>經過幾次接觸，陳婆婆主動分享：「我這輩子做了很多錯事，沒資格安詳離世...」她顯得很內疚。</p>
+            </div>
+            
+            <button class="choice-btn" data-answer="A" onclick="makeChoice(4, 'A')">「過去的事不要想太多」</button>
+            <button class="choice-btn" data-answer="B" onclick="makeChoice(4, 'B')">「能談談當時的情況嗎？」</button>
+            <button class="choice-btn" data-answer="C" onclick="makeChoice(4, 'C')">建議她向家人道歉</button>
+            
+            <div class="feedback" id="feedback4">
+                <h3>💡 專業分析</h3>
+                <div id="result4"></div>
+                <button class="choice-btn" onclick="goToScene(5)">下一個情境 →</button>
+            </div>
+        </div>
+
+        <div class="stage" id="scene5">
+            <div class="phase-indicator">🏥 院友篇</div>
+            <div class="character">💔</div>
+            <h2>情境五：危機處理</h2>
+            
+            <div class="scenario">
+                <p>陳婆婆的室友李婆婆突然離世。陳婆婆非常震驚，拒絕進食，說：「下一個就輪到我了...」</p>
+            </div>
+            
+            <button class="choice-btn" data-answer="A" onclick="makeChoice(5, 'A')">立即轉介醫護人員</button>
+            <button class="choice-btn" data-answer="B" onclick="makeChoice(5, 'B')">陪伴她處理失去朋友的哀傷</button>
+            <button class="choice-btn" data-answer="C" onclick="makeChoice(5, 'C')">告訴她每個人狀況不同</button>
+            
+            <div class="feedback" id="feedback5">
+                <h3>💡 專業分析</h3>
+                <div id="result5"></div>
+                <button class="choice-btn" onclick="goToScene(6)">最後院友情境 →</button>
+            </div>
+        </div>
+
+        <div class="stage" id="scene6">
+            <div class="phase-indicator">🏥 院友篇</div>
+            <div class="character">🌅</div>
+            <h2>情境六：準備告別</h2>
+            
+            <div class="scenario">
+                <p>陳婆婆身體狀況轉差，她平靜地說：「謝謝你陪我這段路...我想寫信給孫子，但不知道怎麼說。」</p>
+            </div>
+            
+            <button class="choice-btn" data-answer="A" onclick="makeChoice(6, 'A')">幫她代寫信件</button>
+            <button class="choice-btn" data-answer="B" onclick="makeChoice(6, 'B')">「我們一起想想您最想說的話」</button>
+            <button class="choice-btn" data-answer="C" onclick="makeChoice(6, 'C')">建議用錄音方式</button>
+            
+            <div class="feedback" id="feedback6">
+                <h3>💡 專業分析</h3>
+                <div id="result6"></div>
+                <button class="choice-btn" onclick="goToScene(7)">進入員工篇 →</button>
+            </div>
+        </div>
+
+        <!-- 情境7-9：員工篇 -->
+        <div class="stage" id="scene7">
+            <div class="phase-indicator employee-phase">👨‍💼 員工篇</div>
+            <div class="character">😟</div>
+            <h2>情境七：員工困擾</h2>
+            
+            <div class="scenario employee-scenario">
+                <p>護理員小美向你求助：「每次看到長者離世，我都很難過...有時候會想，我是不是不適合做這份工作？」</p>
+            </div>
+            
+            <button class="choice-btn" data-answer="A" onclick="makeChoice(7, 'A')">「這是正常的，慢慢就會習慣」</button>
+            <button class="choice-btn" data-answer="B" onclick="makeChoice(7, 'B')">「你的難過顯示了你對生命的珍視」</button>
+            <button class="choice-btn" data-answer="C" onclick="makeChoice(7, 'C')">建議她轉換工作崗位</button>
+            
+            <div class="feedback employee-feedback" id="feedback7">
+                <h3>👨‍💼 員工支援分析</h3>
+                <div id="result7"></div>
+                <button class="choice-btn" onclick="goToScene(8)">下一個員工情境 →</button>
+            </div>
+        </div>
+
+        <div class="stage" id="scene8">
+            <div class="phase-indicator employee-phase">👨‍💼 員工篇</div>
+            <div class="character">😰</div>
+            <h2>情境八：專業倦怠</h2>
+            
+            <div class="scenario employee-scenario">
+                <p>資深照顧員阿華說：「做了十年，看過太多生離死別...現在我對長者都不敢太親近，怕又要經歷失去的痛苦。」</p>
+            </div>
+            
+            <button class="choice-btn" data-answer="A" onclick="makeChoice(8, 'A')">「保持距離是專業的表現」</button>
+            <button class="choice-btn" data-answer="B" onclick="makeChoice(8, 'B')">「讓我們談談如何在關愛中保護自己」</button>
+            <button class="choice-btn" data-answer="C" onclick="makeChoice(8, 'C')">安排他休假調整心情</button>
+            
+            <div class="feedback employee-feedback" id="feedback8">
+                <h3>👨‍💼 員工支援分析</h3>
+                <div id="result8"></div>
+                <button class="choice-btn" onclick="goToScene(9)">最後員工情境 →</button>
+            </div>
+        </div>
+
+        <div class="stage" id="scene9">
+            <div class="phase-indicator employee-phase">👨‍💼 員工篇</div>
+            <div class="character">💪</div>
+            <h2>情境九：團隊成長</h2>
+            
+            <div class="scenario employee-scenario">
+                <p>在員工會議上，有同事提議：「我們應該為員工舉辦生死教育培訓，但大家擔心會增加工作壓力...」</p>
+            </div>
+            
+            <button class="choice-btn" data-answer="A" onclick="makeChoice(9, 'A')">「這是必要的專業發展，大家要配合」</button>
+            <button class="choice-btn" data-answer="B" onclick="makeChoice(9, 'B')">「讓我們先了解大家的需要和擔憂」</button>
+            <button class="choice-btn" data-answer="C" onclick="makeChoice(9, 'C')">「先從志願參加開始，不要強制」</button>
+            
+            <div class="feedback employee-feedback" id="feedback9">
+                <h3>👨‍💼 員工支援分析</h3>
+                <div id="result9"></div>
+                <button class="choice-btn" onclick="goToScene('results')">查看完整總結 →</button>
+            </div>
+        </div>
+
+        <!-- 結果頁面 -->
+        <div class="stage" id="results">
+            <div class="character">🌟</div>
+            <h1>社工專業角色完整總結</h1>
+            
+            <div class="final-box">
+                <h3>恭喜完成九大情境模擬！</h3>
+                <p>你的總得分：<span id="finalScore"></span>/9</p>
+                <p>社工在安老院生死教育中的全方位專業角色：</p>
+            </div>
+            
+            <div style="margin: 20px 0;">
+                <h4>🏥 院友工作角色</h4>
+                <div class="skill-badge">🤝 關係建立者</div>
+                <div class="skill-badge">👂 情感陪伴者</div>
+                <div class="skill-badge">🌉 溝通橋樑</div>
+                <div class="skill-badge">💡 生命引導者</div>
+                <div class="skill-badge">🛡️ 危機介入者</div>
+                <div class="skill-badge">📝 記憶守護者</div>
+            </div>
+            
+            <div style="margin: 20px 0;">
+                <h4>👨‍💼 員工支援角色</h4>
+                <div class="skill-badge employee-badge">💝 情感支持者</div>
+                <div class="skill-badge employee-badge">🔧 專業發展引導者</div>
+                <div class="skill-badge employee-badge">🤲 團隊建設者</div>
+            </div>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: left;">
+                <h3>🎯 九階段完整實踐框架</h3>
+                
+                <h4>🏥 院友服務（1-6）</h4>
+                <p><strong>1. 建立關係</strong> - 從生活經歷切入，避免直接觸及敏感話題</p>
+                <p><strong>2. 情感支持</strong> - 接納和同理死亡焦慮，這是人之常情</p>
+                <p><strong>3. 家庭工作</strong> - 理解家屬情感，協助建立支持系統</p>
+                <p><strong>4. 生命回顧</strong> - 協助長者處理人生遺憾，尋找意義</p>
+                <p><strong>5. 哀傷輔導</strong> - 面對死亡事件，提供專業危機介入</p>
+                <p><strong>6. 傳承準備</strong> - 支持長者表達愛意，留下美好回憶</p>
+                
+                <h4>👨‍💼 員工發展（7-9）</h4>
+                <p><strong>7. 情感支援</strong> - 肯定員工的同理心，協助處理職業情感</p>
+                <p><strong>8. 專業成長</strong> - 教導如何在關愛中保護自己，避免倦怠</p>
+                <p><strong>9. 團隊建設</strong> - 以參與式方式推動團隊專業發展</p>
+                
+                <p><strong>💫 核心理念：社工不只服務院友，更要支援員工團隊，創造一個互相支持的生命教育環境！</strong></p>
+            </div>
+            
+            <button class="choice-btn" onclick="restart()">🔄 重新開始</button>
+        </div>
+    </div>
+
+    <script>
+        let correctAnswers = ['B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B'];
+        let score = 0;
+        
+        function startGame() {
+            goToScene(1);
+        }
+        
+        function goToScene(sceneNumber) {
+            // 隱藏所有場景
+            document.querySelectorAll('.stage').forEach(stage => {
+                stage.classList.remove('active');
+            });
+            
+            // 顯示指定場景
+            const targetScene = sceneNumber === 'results' ? 'results' : `scene${sceneNumber}`;
+            document.getElementById(targetScene).classList.add('active');
+            
+            // 更新場景計數器和進度條
+            if (sceneNumber === 'results') {
+                document.getElementById('sceneCounter').style.display = 'none';
+                updateProgress(100);
+                document.getElementById('finalScore').textContent = score;
+            } else {
+                document.getElementById('sceneCounter').textContent = `情境 ${sceneNumber}/9`;
+                updateProgress((sceneNumber/9) * 100);
+            }
+        }
+        
+        function makeChoice(scene, answer) {
+            // 獲取當前場景的按鈕
+            const buttons = document.querySelectorAll(`#scene${scene} .choice-btn[data-answer]`);
+            const feedback = document.getElementById(`feedback${scene}`);
+            const result = document.getElementById(`result${scene}`);
+            
+            // 禁用所有選擇按鈕
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                // 標記正確/錯誤答案
+                if (btn.getAttribute('data-answer') === answer) {
+                    if (answer === correctAnswers[scene-1]) {
+                        btn.classList.add('correct');
+                        score++;
+                    } else {
+                        btn.classList.add('wrong');
+                    }
+                }
+            });
+            
+            // 顯示回饋
+            setTimeout(() => {
+                let feedbackText = getFeedbackText(scene, answer);
+                result.innerHTML = feedbackText;
+                feedback.style.display = 'block';
+            }, 500);
+        }
+        
+        function getFeedbackText(scene, answer) {
+            const feedbacks = {
+                1: {
+                    'B': '<strong>✅ 正確！</strong><br>建立關係優先於教育內容。從長者的生活經歷入手，先建立信任關係。',
+                    'default': '<strong>❌ 可以更好</strong><br>直接說教或強迫參與會增加長者的抗拒心理。'
+                },
+                2: {
+                    'B': '<strong>✅ 正確！</strong><br>接納和同理長者的情感表達，讓她感受到被理解。死亡焦慮是正常的。',
+                    'default': '<strong>❌ 可以更好</strong><br>否定感受或過早提供資訊都不是最佳回應。'
+                },
+                3: {
+                    'B': '<strong>✅ 正確！</strong><br>先處理情感層面，肯定家屬的愛心，再逐步解釋專業做法。',
+                    'default': '<strong>❌ 可以更好</strong><br>理論解釋或堅持立場難以化解情感對立。'
+                },
+                4: {
+                    'B': '<strong>✅ 正確！</strong><br>生命回顧需要細心聆聽，協助長者處理內疚和遺憾，尋找人生意義。',
+                    'default': '<strong>❌ 可以更好</strong><br>避談過往或急於解決問題都無法真正幫助長者。'
+                },
+                5: {
+                    'B': '<strong>✅ 正確！</strong><br>面對死亡事件引發的危機，哀傷輔導是社工的專業強項，需要陪伴處理情感。',
+                    'default': '<strong>❌ 可以更好</strong><br>單純醫療轉介或理性解釋無法處理深層的死亡焦慮。'
+                },
+                6: {
+                    'B': '<strong>✅ 正確！</strong><br>協助長者表達內心想法，讓她主導內容，社工提供情感支持和組織協助。',
+                    'default': '<strong>❌ 可以更好</strong><br>代為執行或技術建議都不如讓長者親自參與表達來得meaningful。'
+                },
+                7: {
+                    'B': '<strong>✅ 正確！</strong><br>肯定員工的同理心是珍貴的職業素質，協助她理解這是專業優勢而非弱點。',
+                    'default': '<strong>❌ 可以更好</strong><br>否定情感或建議逃避都無法幫助員工成長。真正的專業是學會與情感共處。'
+                },
+                8: {
+                    'B': '<strong>✅ 正確！</strong><br>協助資深員工學習如何在保持專業關愛的同時保護自己，這是可持續發展的關鍵。',
+                    'default': '<strong>❌ 可以更好</strong><br>鼓勵疏離或單純休假都無法解決根本問題。需要學習平衡技巧。'
+                },
+                9: {
+                    'B': '<strong>✅ 正確！</strong><br>了解員工需求和擔憂是推動任何培訓的第一步，參與式規劃能提高接受度。',
+                    'default': '<strong>❌ 可以更好</strong><br>強制執行或完全自由放任都不如先了解需求，再共同規劃培訓內容。'
+                }
+            };
+            
+            return feedbacks[scene][answer] || feedbacks[scene]['default'];
+        }
+        
+        function updateProgress(percent) {
+            document.getElementById('progressBar').style.width = percent + '%';
+        }
+        
+        function restart() {
+            score = 0;
+            document.getElementById('sceneCounter').style.display = 'block';
+            location.reload();
+        }
+    </script>
+</body>
+</html>
